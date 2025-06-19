@@ -7,28 +7,60 @@
 #include "opendbc/safety/board/can.h"
 
 // include the safety policies.
-#include "opendbc/safety/modes/defaults.h"
-#include "opendbc/safety/modes/honda.h"
-#include "opendbc/safety/modes/toyota.h"
-#include "opendbc/safety/modes/tesla.h"
-#include "opendbc/safety/modes/gm.h"
-#include "opendbc/safety/modes/ford.h"
-#include "opendbc/safety/modes/hyundai.h"
-#include "opendbc/safety/modes/chrysler.h"
-#include "opendbc/safety/modes/rivian.h"
-#include "opendbc/safety/modes/subaru.h"
-#include "opendbc/safety/modes/subaru_preglobal.h"
-#include "opendbc/safety/modes/mazda.h"
-#include "opendbc/safety/modes/nissan.h"
-#include "opendbc/safety/modes/volkswagen_mqb.h"
-#include "opendbc/safety/modes/volkswagen_pq.h"
-#include "opendbc/safety/modes/elm327.h"
-#include "opendbc/safety/modes/body.h"
+#include "safety/safety_defaults.h"
+#include "safety/safety_honda.h"
+#include "safety/safety_toyota.h"
+#include "safety/safety_tesla.h"
+#include "safety/safety_gm.h"
+#include "safety/safety_ford.h"
+#include "safety/safety_hyundai.h"
+#include "safety/safety_chrysler.h"
+#include "safety/safety_rivian.h"
+#include "safety/safety_subaru.h"
+#include "safety/safety_subaru_preglobal.h"
+#include "safety/safety_mazda.h"
+#include "safety/safety_nissan.h"
+#include "safety/safety_volkswagen_mqb.h"
+#include "safety/safety_volkswagen_pq.h"
+#include "safety/safety_elm327.h"
+#include "safety/safety_body.h"
+#include "safety/safety_byd.h"
 
 // CAN-FD only safety modes
 #ifdef CANFD
 #include "opendbc/safety/modes/hyundai_canfd.h"
 #endif
+
+// from cereal.car.CarParams.SafetyModel
+#define SAFETY_SILENT 0U
+#define SAFETY_HONDA_NIDEC 1U
+#define SAFETY_TOYOTA 2U
+#define SAFETY_ELM327 3U
+#define SAFETY_GM 4U
+#define SAFETY_HONDA_BOSCH_GIRAFFE 5U
+#define SAFETY_FORD 6U
+#define SAFETY_HYUNDAI 8U
+#define SAFETY_CHRYSLER 9U
+#define SAFETY_TESLA 10U
+#define SAFETY_SUBARU 11U
+#define SAFETY_MAZDA 13U
+#define SAFETY_NISSAN 14U
+#define SAFETY_VOLKSWAGEN_MQB 15U
+#define SAFETY_ALLOUTPUT 17U
+#define SAFETY_GM_ASCM 18U
+#define SAFETY_NOOUTPUT 19U
+#define SAFETY_HONDA_BOSCH 20U
+#define SAFETY_VOLKSWAGEN_PQ 21U
+#define SAFETY_SUBARU_PREGLOBAL 22U
+#define SAFETY_HYUNDAI_LEGACY 23U
+#define SAFETY_HYUNDAI_COMMUNITY 24U
+#define SAFETY_STELLANTIS 25U
+#define SAFETY_FAW 26U
+#define SAFETY_BODY 27U
+#define SAFETY_HYUNDAI_CANFD 28U
+#define SAFETY_RIVIAN 33U
+#define SAFETY_VOLKSWAGEN_MEB 34U
+#define SAFETY_BYD 35U
 
 uint32_t GET_BYTES(const CANPacket_t *msg, int start, int len) {
   uint32_t ret = 0U;
@@ -411,6 +443,7 @@ int set_safety_hooks(uint16_t mode, uint16_t param) {
     {SAFETY_FORD, &ford_hooks},
     {SAFETY_RIVIAN, &rivian_hooks},
     {SAFETY_TESLA, &tesla_hooks},
+    {SAFETY_BYD, &byd_hooks},
 #ifdef CANFD
     {SAFETY_HYUNDAI_CANFD, &hyundai_canfd_hooks},
 #endif
